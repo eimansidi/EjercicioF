@@ -131,6 +131,7 @@ public class HelloController implements Initializable {
     }
 
     public void agregarPersonaTabla(Persona persona) {
+        listaPersonas.add(persona);
         tableView.getItems().add(persona);
     }
 
