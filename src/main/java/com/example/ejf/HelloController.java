@@ -1,5 +1,7 @@
 package com.example.ejf;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -8,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -29,6 +32,11 @@ public class HelloController implements Initializable {
 
     @FXML
     private TableColumn<Persona, Integer> edad;
+
+    @FXML
+    private TextField txtFiltro;
+
+    private ObservableList<Persona> listaPersonas = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -96,6 +104,26 @@ public class HelloController implements Initializable {
 
         tableView.getItems().remove(personaSeleccionada);
         mostrarAlertaExito("Eliminacion", "Persona eliminada correctamente.");
+    }
+
+    @FXML
+    public void filtrarPorNombre() {
+        String filtro = txtFiltro.getText().toLowerCase();
+
+        // Si el filtro está vacío, mostramos todos los elementos
+        if (filtro.isEmpty()) {
+            tableView.setItems(listaPersonas);
+        } else {
+            // Filtramos manualmente la lista según el nombre
+            ObservableList<Persona> listaFiltrada = FXCollections.observableArrayList();
+            for (Persona persona : listaPersonas) {
+                if (persona.getNombre().toLowerCase().contains(filtro)) {
+                    listaFiltrada.add(persona);
+                }
+            }
+            // Actualizamos la tabla con la lista filtrada
+            tableView.setItems(listaFiltrada);
+        }
     }
 
     public boolean existePersona(Persona persona) {
