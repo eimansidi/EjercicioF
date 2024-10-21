@@ -47,7 +47,7 @@
                   <Insets right="10.0" />
                </HBox.margin></Label>
              <TextField fx:id="txtFiltro" onKeyReleased="#filtrarPorNombre" prefHeight="26.0" prefWidth="150.0" />
-            <!--<HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="300.0">
+            <HBox alignment="TOP_RIGHT" prefHeight="100.0" prefWidth="300.0">
                <children>
                   <Button fx:id="btnImportar" mnemonicParsing="false" onAction="#importar" prefWidth="100.0" text="Importar">
                      <HBox.margin>
@@ -55,7 +55,7 @@
                      </HBox.margin></Button>
                   <Button fx:id="btnExportar" mnemonicParsing="false" onAction="#exportar" prefWidth="100.0" text="Exportar" />
                </children>
-            </HBox>-->
+            </HBox>
          </children>
          <padding>
             <Insets bottom="15.0" left="20.0" top="15.0" />
