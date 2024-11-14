@@ -1,5 +1,6 @@
 package com.example.ejf;
 
+import com.example.ejf.model.Persona;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
@@ -24,19 +25,34 @@ public class AgregarController {
     @FXML
     private Button btnCancelar;
 
-    private HelloController helloController;
+    private PersonasController helloController;
     private Persona personaOriginal;
     private boolean modoModificar;
 
-    public void setMainController(HelloController helloController) {
+    /**
+     * Establece el controlador principal de la aplicacion.
+     *
+     * @param helloController Controlador principal de la aplicacion.
+     */
+    public void setMainController(PersonasController helloController) {
         this.helloController = helloController;
     }
 
+    /**
+     * Establece el modo de modificacion, cambiando el texto del boton.
+     *
+     * @param modificar Si es verdadero, el boton mostrara "Modificar", si es falso, "Agregar".
+     */
     public void setModoModificar(boolean modificar) {
         this.modoModificar = modificar;
         btnGuardar.setText(modificar ? "Modificar" : "Agregar");
     }
 
+    /**
+     * Llena los campos con los datos de la persona proporcionada.
+     *
+     * @param persona Persona cuyos datos se desean mostrar en los campos.
+     */
     public void llenarCampos(Persona persona) {
         this.personaOriginal = persona;
         txtNombre.setText(persona.getNombre());
@@ -44,6 +60,12 @@ public class AgregarController {
         txtEdad.setText(String.valueOf(persona.getEdad()));
     }
 
+    /**
+     * Metodo que se ejecuta al hacer clic en el boton "Guardar". Valida los datos y
+     * guarda o modifica la persona en la lista.
+     *
+     * @param event Evento generado por el clic en el boton.
+     */
     @FXML
     void guardar(ActionEvent event) {
         String nombre = txtNombre.getText();
@@ -66,7 +88,7 @@ public class AgregarController {
             try {
                 edad = Integer.parseInt(edadStr);
             } catch (NumberFormatException e) {
-                errores.append("La edad debe ser un número entero.\n");
+                errores.append("La edad debe ser un numero entero.\n");
             }
         }
 
@@ -86,19 +108,30 @@ public class AgregarController {
                 return;
             }
             helloController.agregarPersonaTabla(nuevaPersona);
-            mostrarAlertaExito("Info", "Persona añadida correctamente");
+            mostrarAlertaExito("Info", "Persona anadida correctamente");
         }
 
         Stage stage = (Stage) btnGuardar.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Metodo que se ejecuta al hacer clic en el boton "Cancelar", cerrando la ventana actual.
+     *
+     * @param event Evento generado por el clic en el boton.
+     */
     @FXML
     void cancelar(ActionEvent event) {
         Stage stage = (Stage) btnCancelar.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Muestra una alerta de exito con el mensaje proporcionado.
+     *
+     * @param titulo El titulo de la alerta.
+     * @param mensaje El mensaje que se muestra en la alerta.
+     */
     private void mostrarAlertaExito(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);
@@ -107,6 +140,12 @@ public class AgregarController {
         alert.showAndWait();
     }
 
+    /**
+     * Muestra una alerta de error con el mensaje proporcionado.
+     *
+     * @param titulo El titulo de la alerta.
+     * @param mensaje El mensaje que se muestra en la alerta.
+     */
     private void mostrarAlertaError(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(titulo);

@@ -1,5 +1,6 @@
 package com.example.ejf;
 
+import com.example.ejf.model.Persona;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,17 +15,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+
+import java.io.*;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.stage.FileChooser;
 
-public class HelloController implements Initializable {
+/**
+ * Controlador principal para la gestion de personas.
+ * Permite agregar, modificar, eliminar, filtrar, exportar e importar personas.
+ */
+public class PersonasController implements Initializable {
 
     @FXML
     private TableView<Persona> tableView;
@@ -43,6 +44,12 @@ public class HelloController implements Initializable {
 
     private ObservableList<Persona> listaPersonas = FXCollections.observableArrayList();
 
+    /**
+     * Inicializa las columnas de la tabla y enlaza los datos con sus propiedades.
+     *
+     * @param location  Ubicacion utilizada para resolver rutas relativas para el objeto raiz, o null si no se conoce.
+     * @param resources Recursos utilizados para localizar el objeto raiz, o null si no se especifican.
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         nombre.setCellValueFactory(new PropertyValueFactory<>("nombre"));
@@ -50,6 +57,11 @@ public class HelloController implements Initializable {
         edad.setCellValueFactory(new PropertyValueFactory<>("edad"));
     }
 
+    /**
+     * Abre una ventana modal para agregar una nueva persona.
+     *
+     * @param event Evento que dispara la accion.
+     */
     @FXML
     void agregar(ActionEvent event) {
         try {
@@ -71,6 +83,11 @@ public class HelloController implements Initializable {
         }
     }
 
+    /**
+     * Abre una ventana modal para modificar una persona seleccionada.
+     *
+     * @param event Evento que dispara la accion.
+     */
     @FXML
     void modificar(ActionEvent event) {
         Persona personaSeleccionada = tableView.getSelectionModel().getSelectedItem();
@@ -99,6 +116,11 @@ public class HelloController implements Initializable {
         }
     }
 
+    /**
+     * Elimina una persona seleccionada de la tabla.
+     *
+     * @param event Evento que dispara la accion.
+     */
     @FXML
     void eliminar(ActionEvent event) {
         Persona personaSeleccionada = tableView.getSelectionModel().getSelectedItem();
@@ -111,6 +133,9 @@ public class HelloController implements Initializable {
         mostrarAlertaExito("Eliminacion", "Persona eliminada correctamente.");
     }
 
+    /**
+     * Filtra las personas por nombre basado en el texto ingresado en el campo de filtro.
+     */
     @FXML
     public void filtrarPorNombre() {
         String filtro = txtFiltro.getText().toLowerCase();
@@ -128,6 +153,9 @@ public class HelloController implements Initializable {
         }
     }
 
+    /**
+     * Exporta los datos de las personas en formato CSV.
+     */
     public void exportar() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Guardar como");
@@ -154,6 +182,9 @@ public class HelloController implements Initializable {
         }
     }
 
+    /**
+     * Importa los datos de personas desde un archivo CSV.
+     */
     public void importar() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Abrir archivo");
@@ -181,7 +212,7 @@ public class HelloController implements Initializable {
                         try {
                             edad = Integer.parseInt(data[2].trim());
                         } catch (NumberFormatException e) {
-                            mostrarAlertaError("Error", "La edad debe ser un número válido: " + line);
+                            mostrarAlertaError("Error", "La edad debe ser un numero valido: " + line);
                             continue;
                         }
 
@@ -191,7 +222,7 @@ public class HelloController implements Initializable {
                             mostrarAlertaError("Duplicado", "El registro ya existe: " + line);
                         }
                     } else {
-                        mostrarAlertaError("Error", "Formato de línea inválido: " + line);
+                        mostrarAlertaError("Error", "Formato de linea invalido: " + line);
                     }
                 }
 
@@ -202,20 +233,43 @@ public class HelloController implements Initializable {
         }
     }
 
+    /**
+     * Verifica si una persona ya existe en la tabla.
+     *
+     * @param persona La persona a verificar.
+     * @return true si la persona existe, false en caso contrario.
+     */
     public boolean existePersona(Persona persona) {
         return tableView.getItems().contains(persona);
     }
 
+    /**
+     * Agrega una nueva persona a la tabla.
+     *
+     * @param persona La nueva persona a agregar.
+     */
     public void agregarPersonaTabla(Persona persona) {
         listaPersonas.add(persona);
         tableView.getItems().add(persona);
     }
 
+    /**
+     * Modifica una persona existente en la tabla.
+     *
+     * @param personaOriginal  La persona original a modificar.
+     * @param personaModificada Los nuevos datos de la persona.
+     */
     public void modificarPersonaTabla(Persona personaOriginal, Persona personaModificada) {
         int indice = tableView.getItems().indexOf(personaOriginal);
         tableView.getItems().set(indice, personaModificada);
     }
 
+    /**
+     * Muestra una alerta de exito con un mensaje especifico.
+     *
+     * @param titulo Titulo de la alerta.
+     * @param mensaje Mensaje de exito a mostrar.
+     */
     private void mostrarAlertaExito(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(titulo);
@@ -224,6 +278,12 @@ public class HelloController implements Initializable {
         alert.showAndWait();
     }
 
+    /**
+     * Muestra una alerta de error con un mensaje especifico.
+     *
+     * @param titulo Titulo de la alerta.
+     * @param mensaje Mensaje de error a mostrar.
+     */
     private void mostrarAlertaError(String titulo, String mensaje) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle(titulo);
